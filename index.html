@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - Ateliers Théâtre d'Improvisation</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+        .form-container {
+            max-width: 650px;
+            margin: 50px auto;
+            padding: 25px;
+            background: #fefefe;
+            border: 1px solid #e7e7e7;
+            border-radius: 10px;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #0078D7;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 26px;
+        }
+        h2 {
+            font-size: 20px;
+            margin-top: 0;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin: 15px 0 5px;
+            color: #333;
+        }
+        label span {
+            color: red;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #0078D7;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #005bb5;
+        }
+        .info, .expectations {
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #555;
+        }
+        .info strong {
+            color: #333;
+        }
+        ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        li {
+            margin: 10px 0;
+        }
+        .mentions {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+    </style>
+    <script>
+        // Calcul de l'âge
+        function calculateAge() {
+            const day = document.getElementById("day").value;
+            const month = document.getElementById("month").value;
+            const year = document.getElementById("year").value;
+            if (day && month && year) {
+                const dob = new Date(year, month - 1, day);
+                const ageDiff = Date.now() - dob.getTime();
+                const ageDate = new Date(ageDiff);
+                const age = Math.abs(ageDate.getUTCFullYear() - 1970);
+                document.getElementById("age").value = age;
+
+                // Vérifie si l'âge est inférieur à 18 ans
+                if (age < 18) {
+                    alert("Vous devez avoir au moins 18 ans pour vous inscrire.");
+                    document.getElementById("submit-button").disabled = true;
+                } else {
+                    document.getElementById("submit-button").disabled = false;
+                }
+            }
+        }
+
+        // Génération des dates de mardi à partir du 14 janvier 2025
+        function generateTuesdays() {
+            const calendar = document.getElementById("available-dates");
+            const startDate = new Date(2025, 0, 14); // 14 janvier 2025
+            const endDate = new Date(2025, 11, 31); // 31 décembre 2025
+            let currentDate = startDate;
+
+            while (currentDate <= endDate) {
+                const option = document.createElement("option");
+                option.value = currentDate.toISOString().split("T")[0];
+                option.textContent = currentDate.toLocaleDateString("fr-FR", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                calendar.appendChild(option);
+                currentDate.setDate(currentDate.getDate() + 7); // Passer au mardi suivant
+            }
+        }
+
+        // Comptabiliser les dates sélectionnées
+        function countSelectedDates() {
+            const selectedDates = document.getElementById("available-dates").selectedOptions;
+            document.getElementById("date-count").textContent = `${selectedDates.length} dates sélectionnées.`;
+        }
+
+        // Exécuter au chargement de la page
+        document.addEventListener("DOMContentLoaded", () => {
+            generateTuesdays();
+            document.getElementById("available-dates").addEventListener("change", countSelectedDates);
+        });
+    </script>
+</head>
+<body>
+    <div class="form-container">
+        <!-- Titre principal -->
+        <h1>Inscription aux Ateliers Théâtre d'Improvisation<br>du Secours Populaire de Paris</h1>
+
+        <!-- À quoi s'attendre -->
+        <h2>À quoi s'attendre ?</h2>
+        <div class="expectations">
+            <p>Plongez dans un univers de créativité, de spontanéité et de bonne humeur ! Ces séances sont conçues pour :</p>
+            <ul>
+                <li><strong>Vous amuser avant tout :</strong> des exercices et des jeux dynamiques pour lâcher prise et partager des moments uniques.</li>
+                <li><strong>Explorer votre créativité :</strong> apprendre à inventer des histoires, à jouer des personnages et à improviser des situations inattendues.</li>
+                <li><strong>Gagner en confiance :</strong> développer l’écoute, l’expression, et s’affirmer dans un cadre bienveillant et convivial.</li>
+                <li><strong>Travailler en équipe :</strong> collaborer avec les autres participants pour créer des scènes drôles, touchantes ou surprenantes.</li>
+            </ul>
+        </div>
+
+        <!-- Quand et Où -->
+        <h2>Quand et Où ?</h2>
+        <div class="info">
+            <p><strong>Les ateliers ont lieu à partir du mardi 14 janvier 2025.</strong><br>
+            Adresse : Secours populaire de Paris - 6, passage Ramey 75018</p>
+        </div>
+
+        <!-- Inscription -->
+        <h2>Inscription</h2>
+        <form action="https://formsubmit.co/sylvain.barreau1221@gmail.com" method="POST">
+            <label for="name">Nom complet <span>*</span> :</label>
+            <input type="text" id="name" name="Nom complet" required>
+
+            <label for="firstname">Prénom <span>*</span> :</label>
+            <input type="text" id="firstname" name="Prénom" required>
+
+            <label for="gender">Genre :</label>
+            <select id="gender" name="Genre">
+                <option value="">-- Sélectionnez --</option>
+                <option value="Homme">Homme</option>
+                <option value="Femme">Femme</option>
+                <option value="Intersexué">Intersexué</option>
+                <option value="Autre">Autre</option>
+                <option value="Préférer ne pas répondre">Préférer ne pas répondre</option>
+            </select>
+
+            <label for="birthdate">Date de naissance <span>*</span> :</label>
+            <div style="display: flex; gap: 10px;">
+                <select id="day" name="Jour" required onchange="calculateAge()">
+                    <option value="">Jour</option>
+                    <script>
+                        for (let i = 1; i <= 31; i++) {
+                            document.write(`<option value="${i}">${i}</option>`);
+                        }
+                    </script>
+                </select>
+                <select id="month" name="Mois" required onchange="calculateAge()">
+                    <option value="">Mois</option>
+                    <script>
+                        const months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+                        months.forEach((month, index) => {
+                            document.write(`<option value="${index + 1}">${month}</option>`);
+                        });
+                    </script>
+                </select>
+                <select id="year" name="Année" required onchange="calculateAge()">
+                    <option value="">Année</option>
+                    <script>
+                        const currentYear = new Date().getFullYear();
+                        for (let i = currentYear - 100; i <= currentYear; i++) {
+                            document.write(`<option value="${i}">${i}</option>`);
+                        }
+                    </script>
+                </select>
+            </div>
+
+            <label for="age">Âge :</label>
+            <input type="text" id="age" name="Âge" readonly>
+
+            <label for="email">Adresse e-mail <span>*</span> :</label>
+            <input type="email" id="email" name="Email" required>
+
+            <label for="phone">Numéro de téléphone :</label>
+            <input type="tel" id="phone" name="Téléphone" placeholder="Exemple : 06 12 34 56 78">
+
+            <label for="available-dates">Sélectionnez vos mardis disponibles :</label>
+            <select id="available-dates" name="Dates disponibles[]" multiple>
+                <!-- Les mardis sont générés par JavaScript -->
+            </select>
+            <p id="date-count" style="font-size: 14px; color: #555;">0 dates sélectionnées.</p>
+
+            <label>
+                <input type="checkbox" id="image-rights" name="Droit à l'image" value="Oui"> J'accepte que des images où je figure soient utilisées à des fins de communication.
+            </label>
+
+            <!-- Redirection vers merci.html -->
+            <input type="hidden" name="_next" value="https://slybarrow.github.io/inscription-ateliers-impro/merci.html">
+
+            <!-- Suppression du captcha -->
+            <input type="hidden" name="_captcha" value="false">
+
+            <br><br>
+
+            <button type="submit" id="submit-button">Envoyer l'inscription</button>
+        </form>
+
+        <!-- Mentions légales -->
+        <div class="mentions">
+            <p><strong>Pour plus d’informations :</strong> Contactez-nous à <a href="mailto:EDUCATION.POPULAIRE@secourspopparis.org">EDUCATION.POPULAIRE@secourspopparis.org</a>.</p>
+        </div>
+    </div>
+</body>
+</html>
