@@ -218,6 +218,13 @@
             <label for="phone">Numéro de téléphone :</label>
             <input type="tel" id="phone" name="Téléphone" placeholder="Exemple : 06 12 34 56 78">
 
+           <label for="affiliation">Je suis un(e) <span>*</span> :</label>
+<select id="affiliation" name="Affiliation" required>
+    <option value="">-- Sélectionnez --</option>
+    <option value="Bénéficiaire du Secours Populaire">Bénéficiaire du Secours Populaire</option>
+    <option value="Bénévole du Secours Populaire">Bénévole du Secours Populaire</option>
+</select>
+
             <label for="available-dates">Sélectionnez vos mardis disponibles :</label>
             <select id="available-dates" name="Dates disponibles[]" multiple>
                 <!-- Les mardis sont générés par JavaScript -->
