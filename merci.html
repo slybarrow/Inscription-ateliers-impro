@@ -38,19 +38,19 @@
             color: #333;
             font-size: 16px;
         }
-        a {
-            color: #0078D7;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        a:hover {
-            text-decoration: underline;
+        img {
+            display: none;
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
         }
     </style>
     <script>
-        // Redirection automatique après 3 secondes
+        // Afficher l'image après 3 secondes
         setTimeout(() => {
-            window.location.href = "https://www.instagram.com/secourspopparis/";
+            document.getElementById('thank-you-image').style.display = 'block';
         }, 3000);
     </script>
 </head>
@@ -61,7 +61,7 @@
         </header>
         <h1>Merci pour votre inscription !</h1>
         <p>Votre inscription a bien été enregistrée.</p>
-        <img src="peres%20noel%20verts.jpg" alt="Pères Noël Verts">
+        <img id="thank-you-image" src="peres%20noel%20verts.jpg" alt="Pères Noël Verts">
     </div>
 </body>
 </html>
