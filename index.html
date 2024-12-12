@@ -216,7 +216,7 @@
         <h2>Inscription</h2>
 
         <!-- Formulaire -->
-<<form action="https://formsubmit.co/sylvain.barreau1221@gmail.com" method="POST">
+<form action="https://formsubmit.co/sylvain.barreau1221@gmail.com" method="POST">
     <label for="name">Nom complet <span>*</span></label>
     <input type="text" id="name" name="Nom complet" required>
 
@@ -256,8 +256,9 @@
         J'accepte que des images où je figure soient utilisées à des fins de communication.
     </label>
 
-    <!-- Redirection vers une page de remerciement -->
+    <!-- Redirection et désactivation du captcha -->
     <input type="hidden" name="_redirect" value="https://slybarrow.github.io/inscription-ateliers-impro/merci.html">
+    <input type="hidden" name="_captcha" value="false">
 
     <button type="submit">Envoyer l'inscription</button>
 </form>
