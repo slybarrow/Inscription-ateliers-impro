@@ -257,11 +257,24 @@
     </label>
 
     <!-- Redirection vers une page de remerciement -->
-    <input type="hidden" name="_redirect" value="https://slybarrow.github.io/inscription-ateliers-impro/merci.html">
+   <form action="https://formsubmit.co/sylvain.barreau1221@gmail.com" method="POST" onsubmit="redirectAfterSubmit(event)">
     <input type="hidden" name="_captcha" value="false">
-
-    <button type="submit">Envoyer l'inscription</button>
+    <!-- Vos autres champs -->
+    <button type="submit">Envoyer</button>
 </form>
+
+<script>
+    function redirectAfterSubmit(event) {
+        event.preventDefault(); // Empêche le comportement par défaut
+        const form = event.target;
+        fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form)
+        }).then(() => {
+            window.location.href = "https://slybarrow.github.io/inscription-ateliers-impro/merci.html";
+        });
+    }
+</script>
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
