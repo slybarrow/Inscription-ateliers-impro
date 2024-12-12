@@ -241,9 +241,7 @@
 
     <label for="dates">Sélectionnez vos mardis disponibles :</label>
     <select id="dates" name="Dates disponibles[]" multiple>
-        <!-- Ajoute des options ici -->
-        <option value="Mardi 1">Mardi 1</option>
-        <option value="Mardi 2">Mardi 2</option>
+        <!-- Dates générées dynamiquement par JavaScript -->
     </select>
 
     <label for="affiliation">Je suis un(e) <span>*</span> :</label>
@@ -264,6 +262,32 @@
     <button type="submit">Envoyer l'inscription</button>
 </form>
 
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const select = document.getElementById("dates");
+        const today = new Date();
+        const startDate = new Date(2025, 0, 14); // 14 janvier 2025
+        const endDate = new Date(2025, 11, 31); // Fin décembre 2025
+
+        let currentDate = startDate;
+        while (currentDate <= endDate) {
+            if (currentDate >= today) {
+                const option = document.createElement("option");
+                option.value = currentDate.toISOString().split("T")[0];
+                option.textContent = currentDate.toLocaleDateString("fr-FR", {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                select.appendChild(option);
+            }
+            currentDate.setDate(currentDate.getDate() + 7); // Passer au mardi suivant
+        }
+    });
+</script>
+
+</form>
 
         <!-- Mentions légales -->
         <div class="mentions">
