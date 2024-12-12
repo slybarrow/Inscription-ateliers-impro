@@ -152,28 +152,34 @@
         }
 
         // Génération des dates de mardi
-        function generateTuesdays() {
-            const calendar = document.getElementById("available-dates");
-            const today = new Date();
-            const startDate = new Date(Date.UTC(2025, 0, 14));
-            const endDate = new Date(Date.UTC(2025, 11, 31));
-            let currentDate = startDate;
+    // Génération des dates de mardi avec correction de fuseau horaire
+function generateTuesdays() {
+    const calendar = document.getElementById("available-dates");
+    const today = new Date();
+    const startDate = new Date(Date.UTC(2025, 0, 14)); // 14 janvier 2025
+    const endDate = new Date(Date.UTC(2025, 11, 31)); // 31 décembre 2025
+    let currentDate = startDate;
 
-            while (currentDate <= endDate) {
-                if (currentDate >= today) {
-                    const option = document.createElement("option");
-                    option.value = currentDate.toISOString().split("T")[0];
-                    option.textContent = currentDate.toLocaleDateString("fr-FR", {
-                        weekday: 'long',
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                    });
-                    calendar.appendChild(option);
-                }
-                currentDate.setUTCDate(currentDate.getUTCDate() + 7);
-            }
+    while (currentDate <= endDate) {
+        // Vérification si la date n'est pas passée
+        if (currentDate >= today) {
+            const option = document.createElement("option");
+            option.value = currentDate.toISOString().split("T")[0]; // Date au format ISO (yyyy-mm-dd)
+            option.textContent = currentDate.toLocaleDateString("fr-FR", {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            calendar.appendChild(option);
         }
+        // Passer au mardi suivant (7 jours)
+        currentDate.setUTCDate(currentDate.getUTCDate() + 7);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", generateTuesdays);
+
 
         // Mise à jour du compteur de dates sélectionnées
         function updateDateCount() {
