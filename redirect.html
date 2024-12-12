@@ -1,70 +1,82 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirection - Merci pour votre inscription</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(120deg, #f26419, #0078D7);
-            color: white;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+function doPost(e) {
+    try {
+        // Ouvrir la feuille Google Sheets par ID
+        const sheet = SpreadsheetApp.openById("1HU-e4w_wVvsk7pWoP02fqA5feXhLBxJ15cde3NynvfE").getActiveSheet();
+        const data = e.parameter;
+
+        // Calcul de l'âge à partir de la date de naissance
+        let age = "Non renseigné";
+        if (data['Jour'] && data['Mois'] && data['Année']) {
+            const dob = new Date(data['Année'], data['Mois'] - 1, data['Jour']);
+            const diff = new Date() - dob;
+            age = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
         }
-        .container {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            padding: 20px 30px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-            max-width: 600px;
+
+        // Traitement des disponibilités
+        const disponibilites = Array.isArray(data['Dates disponibles[]']) 
+            ? data['Dates disponibles[]'].join(", ") 
+            : data['Dates disponibles[]'] || "Non renseigné";
+
+        // Validation du droit à l'image
+        const droitImage = data['Droit à l\'image'] || "Non renseigné";
+
+        // Validation de l'affiliation
+        const affiliation = data['Affiliation'] || "Non renseigné";
+
+        // Ajouter les données dans Google Sheets
+        sheet.appendRow([
+            data['Nom complet'],             // Colonne A : Nom complet
+            data['Prénom'],                  // Colonne B : Prénom
+            age,                             // Colonne C : Âge
+            data['Genre'],                   // Colonne D : Genre
+            data['Email'],                   // Colonne E : E-mail
+            data['Téléphone'],               // Colonne F : Téléphone
+            disponibilites,                  // Colonne G : Disponibilités
+            droitImage,                      // Colonne H : Droit à l'image
+            affiliation,                     // Colonne I : Affiliation
+            "En attente"                     // Colonne J : Statut
+        ]);
+
+        // Envoyer un email de confirmation
+        const email = data['Email'];
+        const nomComplet = data['Nom complet'];
+        const prenom = data['Prénom'];
+        if (email) {
+            MailApp.sendEmail({
+                to: email,
+                subject: "Confirmation de votre inscription aux ateliers d'improvisation",
+                body: `Bonjour ${prenom} ${nomComplet},
+
+Merci pour votre inscription aux ateliers de théâtre d'improvisation du Secours Populaire de Paris.
+Nous avons bien reçu vos informations :
+- Nom complet : ${nomComplet}
+- Prénom : ${prenom}
+- Âge : ${age}
+- Genre : ${data['Genre']}
+- Disponibilités : ${disponibilites}
+
+Nous vous contacterons prochainement avec plus de détails sur les ateliers.
+
+Cordialement,
+L'équipe du Secours Populaire
+`
+            });
         }
-        header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        header img {
-            height: 80px;
-        }
-        h1 {
-            color: #f26419;
-            font-size: 28px;
-            margin-bottom: 20px;
-        }
-        p {
-            color: #333;
-            font-size: 16px;
-            line-height: 1.5;
-        }
-        a {
-            color: #0078D7;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
-    <script>
-        // Redirection automatique après 5 secondes
-        setTimeout(() => {
-            window.location.href = "https://slybarrow.github.io/inscription-ateliers-impro/merci.html";
-        }, 5000);
-    </script>
-</head>
-<body>
-    <div class="container">
-        <header>
-            <img src="Logo_CMJN@2x.png" alt="Secours Populaire Français">
-        </header>
-        <h1>Redirection en cours...</h1>
-        <p>Merci pour votre inscription ! Vous serez redirigé vers la page de confirmation dans quelques secondes.</p>
-        <p>Si la redirection ne fonctionne pas, cliquez <a href="https://slybarrow.github.io/inscription-ateliers-impro/merci.html">ici</a>.</p>
-    </div>
-</body>
-</html>
+
+        // Redirection vers le fichier redirect.html
+        return HtmlService.createHtmlOutput(
+            `<html>
+                <head>
+                    <meta http-equiv="refresh" content="0; url=https://slybarrow.github.io/inscription-ateliers-impro/redirect.html">
+                </head>
+                <body>
+                    <p>Redirection...</p>
+                </body>
+            </html>`
+        ).setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+
+    } catch (error) {
+        // Gestion des erreurs
+        return HtmlService.createHtmlOutput(`<p>Erreur : ${error.message}</p>`);
+    }
+}
