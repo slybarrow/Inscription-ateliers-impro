@@ -289,9 +289,16 @@
                 J'accepte que des images où je figure soient utilisées à des fins de communication.
             </label>
 
-            <input type="hidden" name="_redirect" value="merci.html">
-            <button type="submit">Envoyer l'inscription</button>
-        </form>
-    </div>
+             <!-- Désactivation de captcha et ajout de redirection -->
+    <input type="hidden" name="_next" value="https://slybarrow.github.io/inscription-ateliers-impro/merci.html">
+    <input type="hidden" name="_captcha" value="false">
+
+    <button type="submit">Envoyer l'inscription</button>
+</form>
+
+        <div class="mentions">
+    <p><strong>Pour plus d’informations :</strong> Contactez-nous à <a href="mailto:EDUCATION.POPULAIRE@secourspopparis.org">EDUCATION.POPULAIRE@secourspopparis.org</a>.</p>
+</div>
+
 </body>
 </html>
