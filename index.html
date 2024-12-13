@@ -216,84 +216,82 @@
         <h2>Inscription</h2>
 
         <!-- Formulaire -->
-        <form action="https://formsubmit.co/sylvain.barreau1221@gmail.com" method="POST">
-    <label for="name">Nom complet <span>*</span></label>
-    <input type="text" id="name" name="Nom complet" required>
+        <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+            <label for="name">Nom complet <span>*</span></label>
+            <input type="text" id="name" name="Nom complet" required>
 
-    <label for="firstname">Prénom <span>*</span></label>
-    <input type="text" id="firstname" name="Prénom" required>
+            <label for="firstname">Prénom <span>*</span></label>
+            <input type="text" id="firstname" name="Prénom" required>
 
-    <label for="genre">Genre :</label>
-    <select id="genre" name="Genre">
-        <option value="">-- Sélectionnez --</option>
-        <option value="Homme">Homme</option>
-        <option value="Femme">Femme</option>
-        <option value="Intersexué">Intersexué</option>
-        <option value="Autre">Autre</option>
-        <option value="Préférer ne pas répondre">Préférer ne pas répondre</option>
-    </select>
+            <label for="birthdate">Date de naissance <span>*</span></label>
+            <div style="display: flex; gap: 10px;">
+                <select id="day" name="Jour" required onchange="calculateAge()">
+                    <option value="">Jour</option>
+                    <script>
+                        for (let i = 1; i <= 31; i++) {
+                            document.write(`<option value="${i}">${i}</option>`);
+                        }
+                    </script>
+                </select>
+                <select id="month" name="Mois" required onchange="calculateAge()">
+                    <option value="">Mois</option>
+                    <script>
+                        const months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+                        months.forEach((month, index) => {
+                            document.write(`<option value="${index + 1}">${month}</option>`);
+                        });
+                    </script>
+                </select>
+                <select id="year" name="Année" required onchange="calculateAge()">
+                    <option value="">Année</option>
+                    <script>
+                        const currentYear = new Date().getFullYear();
+                        for (let i = currentYear - 100; i <= currentYear; i++) {
+                            document.write(`<option value="${i}">${i}</option>`);
+                        }
+                    </script>
+                </select>
+            </div>
 
-    <label for="email">Adresse e-mail <span>*</span></label>
-    <input type="email" id="email" name="Email" required>
+            <p id="age-display" style="font-weight: bold; color: #0078D7;">Âge : Non renseigné</p>
 
-    <label for="phone">Numéro de téléphone :</label>
-    <input type="tel" id="phone" name="Téléphone" placeholder="Exemple : 06 12 34 56 78">
+            <label for="gender">Genre :</label>
+            <select id="gender" name="Genre">
+                <option value="">-- Sélectionnez --</option>
+                <option value="Homme">Homme</option>
+                <option value="Femme">Femme</option>
+                <option value="Intersexué">Intersexué</option>
+                <option value="Autre">Autre</option>
+                <option value="Préférer ne pas répondre">Préférer ne pas répondre</option>
+            </select>
 
-    <label for="dates">Sélectionnez vos mardis disponibles :</label>
-    <select id="dates" name="Dates disponibles[]" multiple>
-        <!-- Dates générées dynamiquement par JavaScript -->
-    </select>
+            <label for="email">Adresse e-mail <span>*</span></label>
+            <input type="email" id="email" name="Email" required>
 
-    <label for="affiliation">Je suis un(e) <span>*</span> :</label>
-    <select id="affiliation" name="Affiliation" required>
-        <option value="">-- Sélectionnez --</option>
-        <option value="Bénéficiaire du Secours Populaire">Bénéficiaire du Secours Populaire</option>
-        <option value="Bénévole du Secours Populaire">Bénévole du Secours Populaire</option>
-    </select>
+            <label for="phone">Numéro de téléphone :</label>
+            <input type="tel" id="phone" name="Téléphone" placeholder="Exemple : 06 12 34 56 78">
 
-    <label>
-        <input type="checkbox" name="Droit à l'image" value="Oui">
-        J'accepte que des images où je figure soient utilisées à des fins de communication.
-    </label>
+            <label for="affiliation">Je suis un(e) <span>*</span> :</label>
+            <select id="affiliation" name="Affiliation" required>
+                <option value="">-- Sélectionnez --</option>
+                <option value="Bénéficiaire du Secours Populaire">Bénéficiaire du Secours Populaire</option>
+                <option value="Bénévole du Secours Populaire">Bénévole du Secours Populaire</option>
+            </select>
 
-    <!-- Redirection vers une page de remerciement -->
-    <input type="hidden" name="_redirect" value="https://slybarrow.github.io/inscription-ateliers-impro/merci.html">
-    <input type="hidden" name="_captcha" value="false">
+            <label for="available-dates">Sélectionnez vos mardis disponibles :</label>
+            <select id="available-dates" name="Dates disponibles[]" multiple>
+                <!-- Les dates seront générées par JavaScript -->
+            </select>
+            <p id="date-count" style="font-size: 14px; color: #555;">0 dates sélectionnées.</p>
 
-    <button type="submit">Envoyer l'inscription</button>
-</form>
+            <label>
+                <input type="checkbox" id="image-rights" name="Droit à l'image" value="Oui">
+                J'accepte que des images où je figure soient utilisées à des fins de communication.
+            </label>
 
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const select = document.getElementById("dates");
-        const today = new Date();
-        const startDate = new Date(2025, 0, 14); // 14 janvier 2025
-        const endDate = new Date(2025, 11, 31); // Fin décembre 2025
-
-        let currentDate = startDate;
-        while (currentDate <= endDate) {
-            if (currentDate >= today) {
-                const option = document.createElement("option");
-                option.value = currentDate.toISOString().split("T")[0];
-                option.textContent = currentDate.toLocaleDateString("fr-FR", {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                });
-                select.appendChild(option);
-            }
-            currentDate.setDate(currentDate.getDate() + 7); // Passer au mardi suivant
-        }
-    });
-</script>
-
-</form>
-
-        <!-- Mentions légales -->
-        <div class="mentions">
-            <p><strong>Pour plus d’informations :</strong> Contactez-nous à <a href="mailto:EDUCATION.POPULAIRE@secourspopparis.org">EDUCATION.POPULAIRE@secourspopparis.org</a>.</p>
-        </div>
+            <input type="hidden" name="_redirect" value="merci.html">
+            <button type="submit">Envoyer l'inscription</button>
+        </form>
     </div>
 </body>
 </html>
