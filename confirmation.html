@@ -17,14 +17,28 @@
             margin: 20px auto;
             padding: 20px;
             background: rgba(255, 255, 255, 0.9);
+            border: none;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             text-align: center;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        header img {
+            max-width: 80%;
+            height: auto;
         }
         h1 {
             color: #f26419;
             font-size: 24px;
             margin-bottom: 15px;
+        }
+        p {
+            color: #333;
+            font-size: 14px;
+            line-height: 1.5;
         }
         .confirmation-button {
             display: inline-block;
@@ -35,6 +49,7 @@
             background-color: #f26419;
             border: none;
             border-radius: 5px;
+            text-decoration: none;
             cursor: pointer;
             width: 80%;
             max-width: 300px;
@@ -42,28 +57,68 @@
         .confirmation-button:hover {
             background-color: #d35400;
         }
+        .radio-container {
+            margin-top: 20px;
+            text-align: left;
+        }
         .radio-container label {
+            font-size: 14px;
+            color: #333;
             display: block;
             margin: 5px 0;
+        }
+        .info-link {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #333;
+        }
+        .info-link a {
+            color: #0078D7;
+            text-decoration: none;
+        }
+        .info-link a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 20px;
+            }
+            p {
+                font-size: 12px;
+            }
+            .confirmation-button {
+                font-size: 14px;
+                padding: 10px;
+            }
+            .radio-container label {
+                font-size: 12px;
+            }
+            .info-link {
+                font-size: 12px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="form-container">
+        <header>
+            <img src="Logo_CMJN@2x.png" alt="Logo Secours Populaire">
+        </header>
         <h1>Merci de confirmer votre présence</h1>
-        <p>Nous sommes ravis que vous participiez à notre atelier d'improvisation. Merci de confirmer :</p>
+        <p>Nous sommes ravis que vous participiez à notre atelier d'improvisation ! Merci de remplir les informations ci-dessous pour confirmer votre présence :</p>
         <form id="confirmationForm">
             <label for="email">Votre e-mail :</label>
-            <input type="email" id="email" name="email" required><br><br>
+            <input type="email" id="email" name="email" required style="margin-bottom: 15px; width: 80%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;"><br>
             <div class="radio-container">
                 <input type="radio" id="presence" name="attendance" value="present">
-                <label for="presence">Je m'engage à être présent(e).</label><br>
+                <label for="presence">Je m'engage à être présent(e) au cours.</label><br>
                 <input type="radio" id="absence" name="attendance" value="absent">
-                <label for="absence">Je ne pourrai malheureusement pas venir.</label>
+                <label for="absence">Je ne pourrai malheureusement pas venir au cours.</label>
             </div>
             <button type="button" class="confirmation-button" onclick="submitResponse()">Confirmer mon choix</button>
         </form>
-        <p id="responseMessage"></p>
+        <p id="responseMessage" style="margin-top: 15px; color: #333;"></p>
+        <p class="info-link">Pour plus d'informations, <a href="mailto:sylvain.barreau1221@gmail.com">cliquez ici</a>.</p>
     </div>
     <script>
         function submitResponse() {
