@@ -130,7 +130,7 @@
                 return;
             }
 
-            fetch('https://script.google.com/macros/s/AKfycbyUmnFRjIx7gxgdfNT4BO9E9B2NkLB1uWBgiPqkQ4Hv_-Cx5cae_Pl34GjqQ2QIsf0duQ/exec', {
+            fetch('https://script.google.com/macros/s/AKfycbxorAUoS9g7pIWuu1mEXchoBfgGT7UZ0_L47ctYuP2aUvJdxk7X00bfXNTadaen6me3uA/exec', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -139,7 +139,7 @@
             })
             .then(response => response.text())
             .then(data => {
-                document.getElementById("responseMessage").innerText = "Merci, votre réponse a bien été envoyée !";
+                document.getElementById("responseMessage").innerText = data;
                 document.getElementById("confirmationForm").style.display = "none";
             })
             .catch(error => {
