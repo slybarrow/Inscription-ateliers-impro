@@ -27,14 +27,14 @@
         }
         header img {
             height: 60px;
-            margin-top: 40px; /* Ajuste l'espace au-dessus du logo */
-            margin-bottom: 20px; /* Ajuste l'espace en dessous du logo */
+            margin-top: 40px;
+            margin-bottom: 20px;
             display: block;
             margin-left: auto;
-            margin-right: auto; /* Centre horizontalement */
+            margin-right: auto;
         }
         h1 {
-           color: white !important; /* Change la couleur en blanc */
+           color: white !important;
             font-size: 28px;
             margin-bottom: 15px;
         }
@@ -123,7 +123,7 @@
                 return false;
             }
 
-            const age = calculateAge();
+            const age = document.getElementById("age").value;
             if (age < 18) {
                 alert("Vous devez avoir au moins 18 ans pour vous inscrire.");
                 event.preventDefault();
@@ -139,31 +139,12 @@
             return true;
         }
 
-        // Calcul de l'âge
-        function calculateAge() {
-            const day = document.getElementById("day").value;
-            const month = document.getElementById("month").value;
-            const year = document.getElementById("year").value;
-            if (day && month && year) {
-                const dob = new Date(year, month - 1, day);
-                const ageDiff = Date.now() - dob.getTime();
-                const ageDate = new Date(ageDiff);
-                const age = Math.abs(ageDate.getUTCFullYear() - 1970);
-                document.getElementById("age-display").textContent = `Âge : ${age} ans`;
-                return age;
-            }
-            document.getElementById("age-display").textContent = "Âge : Non renseigné";
-            return 0;
-        }
-
-        // Génération des dates de mardi excluant les vacances scolaires
-        function generateTuesdays() {
+        // Désactivation des dates pleines et exclusion des vacances scolaires
+        document.addEventListener("DOMContentLoaded", async () => {
+            const apiUrl = "https://sheetdb.io/api/v1/garbqmebupvlo";
             const calendar = document.getElementById("available-dates");
-            const today = new Date();
-            const startDate = new Date(Date.UTC(2025, 0, 14));
-            const endDate = new Date(Date.UTC(2025, 11, 31));
-            let currentDate = startDate;
 
+            // Plages de vacances scolaires à exclure
             const vacationDates = [
                 { start: new Date("2025-02-22"), end: new Date("2025-03-10") }, // Vacances d'hiver
                 { start: new Date("2025-04-19"), end: new Date("2025-05-05") }, // Vacances de printemps
@@ -172,36 +153,36 @@
                 { start: new Date("2025-12-20"), end: new Date("2026-01-05") }, // Vacances de Noël
             ];
 
-            while (currentDate <= endDate) {
-                const isVacation = vacationDates.some(vacation =>
-                    currentDate >= vacation.start && currentDate <= vacation.end
-                );
+            try {
+                // Récupérer les données depuis SheetDB
+                const response = await fetch(apiUrl);
+                const data = await response.json();
 
-                if (currentDate >= today && !isVacation) {
-                    const option = document.createElement("option");
-                    option.value = currentDate.toISOString().split("T")[0];
-                    option.textContent = currentDate.toLocaleDateString("fr-FR", {
-                        weekday: 'long',
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                    });
-                    calendar.appendChild(option);
-                }
-                currentDate.setUTCDate(currentDate.getUTCDate() + 7);
+                // Comptabiliser les inscriptions par date
+                const dateCounts = {};
+                data.forEach(entry => {
+                    if (entry["Dates disponibles"]) {
+                        entry["Dates disponibles"].split(",").forEach(date => {
+                            dateCounts[date] = (dateCounts[date] || 0) + 1;
+                        });
+                    }
+                });
+
+                // Vérifier les dates valides (hors vacances scolaires et non pleines)
+                Array.from(calendar.options).forEach(option => {
+                    const date = new Date(option.value);
+                    const isVacation = vacationDates.some(
+                        vacation => date >= vacation.start && date <= vacation.end
+                    );
+
+                    if (isVacation || dateCounts[option.value] >= 16) {
+                        option.disabled = true;
+                        option.textContent += " (Indisponible)";
+                    }
+                });
+            } catch (error) {
+                console.error("Erreur lors de la récupération des disponibilités :", error);
             }
-        }
-
-        // Mise à jour du compteur de dates sélectionnées
-        function updateDateCount() {
-            const selectedDates = document.getElementById("available-dates").selectedOptions;
-            document.getElementById("date-count").textContent = `${selectedDates.length} dates sélectionnées.`;
-        }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            generateTuesdays();
-            document.getElementById("available-dates").addEventListener("change", updateDateCount);
-            document.querySelector("form").addEventListener("submit", validateForm);
         });
     </script>
 </head>
@@ -233,44 +214,15 @@
         <h2>Inscription</h2>
 
         <!-- Formulaire -->
-        <form action="https://formspree.io/f/mwpkjzzb" method="POST">
+        <form action="https://sheetdb.io/api/v1/garbqmebupvlo" method="POST" onsubmit="return validateForm(event)">
             <label for="name">Nom complet <span>*</span></label>
             <input type="text" id="name" name="Nom complet" required>
 
             <label for="firstname">Prénom <span>*</span></label>
             <input type="text" id="firstname" name="Prénom" required>
 
-            <label for="birthdate">Date de naissance <span>*</span></label>
-            <div style="display: flex; gap: 10px;">
-                <select id="day" name="Jour" required onchange="calculateAge()">
-                    <option value="">Jour</option>
-                    <script>
-                        for (let i = 1; i <= 31; i++) {
-                            document.write(`<option value="${i}">${i}</option>`);
-                        }
-                    </script>
-                </select>
-                <select id="month" name="Mois" required onchange="calculateAge()">
-                    <option value="">Mois</option>
-                    <script>
-                        const months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
-                        months.forEach((month, index) => {
-                            document.write(`<option value="${index + 1}">${month}</option>`);
-                        });
-                    </script>
-                 </select>
-                <select id="year" name="Année" required onchange="calculateAge()">
-                    <option value="">Année</option>
-                    <script>
-                        const currentYear = new Date().getFullYear();
-                        for (let i = currentYear - 100; i <= currentYear; i++) {
-                            document.write(`<option value="${i}">${i}</option>`);
-                        }
-                    </script>
-                </select>
-            </div>
-
-            <p id="age-display" style="font-weight: bold; color: #0078D7;">Âge : Non renseigné</p>
+            <label for="age">Âge <span>*</span></label>
+            <input type="number" id="age" name="Âge" min="18" max="100" required>
 
             <label for="gender">Genre :</label>
             <select id="gender" name="Genre">
@@ -306,16 +258,16 @@
                 J'accepte que des images où je figure soient utilisées à des fins de communication.
             </label>
 
-             <!-- Désactivation de captcha et ajout de redirection -->
-    <input type="hidden" name="_next" value="https://slybarrow.github.io/inscription-ateliers-impro/merci.html">
-    <input type="hidden" name="_captcha" value="false">
+            <!-- Désactivation de captcha et ajout de redirection -->
+            <input type="hidden" name="_next" value="https://slybarrow.github.io/inscription-ateliers-impro/merci.html">
+            <input type="hidden" name="_captcha" value="false">
 
-    <button type="submit">Envoyer l'inscription</button>
-</form>
+            <button type="submit">Envoyer l'inscription</button>
+        </form>
 
         <div class="mentions">
-    <p><strong>Pour plus d’informations :</strong> Contactez-nous à <a href="mailto:EDUCATION.POPULAIRE@secourspopparis.org">EDUCATION.POPULAIRE@secourspopparis.org</a>.</p>
-</div>
-
+            <p><strong>Pour plus d’informations :</strong> Contactez-nous à <a href="mailto:EDUCATION.POPULAIRE@secourspopparis.org">EDUCATION.POPULAIRE@secourspopparis.org</a>.</p>
+        </div>
+    </div>
 </body>
 </html>
