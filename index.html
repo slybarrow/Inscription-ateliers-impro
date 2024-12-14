@@ -139,6 +139,10 @@
                 return false;
             }
 
+            // Concaténer les dates sélectionnées avant soumission
+            const dateValues = Array.from(selectedDates).map(option => option.value).join(", ");
+            document.getElementById("hidden-dates").value = dateValues;
+
             return true;
         }
 
@@ -293,6 +297,7 @@
             <select id="available-dates" name="Disponibilités" multiple>
                 <!-- Les dates seront générées par JavaScript -->
             </select>
+            <input type="hidden" id="hidden-dates" name="Disponibilités"> <!-- Champ caché pour envoyer les dates sélectionnées -->
             <p id="date-count" style="font-size: 14px; color: #555;">0 dates sélectionnées.</p>
 
             <label>
