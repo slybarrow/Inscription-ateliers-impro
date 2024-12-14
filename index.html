@@ -118,7 +118,7 @@
             }
 
             if (phone && !phoneRegex.test(phone)) {
-                alert("Veuillez entrer un numéro de téléphone valide (ex. 06 12 34 56 78). ");
+                alert("Veuillez entrer un numéro de téléphone valide (ex. 06 12 34 56 78).");
                 event.preventDefault();
                 return false;
             }
@@ -156,7 +156,7 @@
             return 0;
         }
 
-        // Génération des dates de mardi excluant les vacances scolaires
+        // Génération des dates de mardi
         function generateTuesdays() {
             const calendar = document.getElementById("available-dates");
             const today = new Date();
@@ -164,20 +164,8 @@
             const endDate = new Date(Date.UTC(2025, 11, 31));
             let currentDate = startDate;
 
-            const vacationDates = [
-                { start: new Date("2025-02-22"), end: new Date("2025-03-10") }, // Vacances d'hiver
-                { start: new Date("2025-04-19"), end: new Date("2025-05-05") }, // Vacances de printemps
-                { start: new Date("2025-07-05"), end: new Date("2025-09-01") }, // Grandes vacances
-                { start: new Date("2025-10-18"), end: new Date("2025-11-03") }, // Vacances de la Toussaint
-                { start: new Date("2025-12-20"), end: new Date("2026-01-05") }, // Vacances de Noël
-            ];
-
             while (currentDate <= endDate) {
-                const isVacation = vacationDates.some(vacation =>
-                    currentDate >= vacation.start && currentDate <= vacation.end
-                );
-
-                if (currentDate >= today && !isVacation) {
+                if (currentDate >= today) {
                     const option = document.createElement("option");
                     option.value = currentDate.toISOString().split("T")[0];
                     option.textContent = currentDate.toLocaleDateString("fr-FR", {
@@ -259,4 +247,63 @@
                         });
                     </script>
                 </select>
-                <select id="year" name="Année"
+                <select id="year" name="Année" required onchange="calculateAge()">
+                    <option value="">Année</option>
+                    <script>
+                        const currentYear = new Date().getFullYear();
+                        for (let i = currentYear - 100; i <= currentYear; i++) {
+                            document.write(`<option value="${i}">${i}</option>`);
+                        }
+                    </script>
+                </select>
+            </div>
+
+            <p id="age-display" style="font-weight: bold; color: #0078D7;">Âge : Non renseigné</p>
+
+            <label for="gender">Genre :</label>
+            <select id="gender" name="Genre">
+                <option value="">-- Sélectionnez --</option>
+                <option value="Homme">Homme</option>
+                <option value="Femme">Femme</option>
+                <option value="Intersexué">Intersexué</option>
+                <option value="Autre">Autre</option>
+                <option value="Préférer ne pas répondre">Préférer ne pas répondre</option>
+            </select>
+
+            <label for="email">Adresse e-mail <span>*</span></label>
+            <input type="email" id="email" name="Email" required>
+
+            <label for="phone">Numéro de téléphone :</label>
+            <input type="tel" id="phone" name="Téléphone" placeholder="Exemple : 06 12 34 56 78">
+
+            <label for="affiliation">Je suis un(e) <span>*</span> :</label>
+            <select id="affiliation" name="Affiliation" required>
+                <option value="">-- Sélectionnez --</option>
+                <option value="Bénéficiaire du Secours Populaire">Bénéficiaire du Secours Populaire</option>
+                <option value="Bénévole du Secours Populaire">Bénévole du Secours Populaire</option>
+            </select>
+
+            <label for="available-dates">Sélectionnez vos mardis<br>(16 personnes par cours) :</label>
+            <select id="available-dates" name="Dates disponibles[]" multiple>
+                <!-- Les dates seront générées par JavaScript -->
+            </select>
+            <p id="date-count" style="font-size: 14px; color: #555;">0 dates sélectionnées.</p>
+
+            <label>
+                <input type="checkbox" id="image-rights" name="Droit à l'image" value="Oui">
+                J'accepte que des images où je figure soient utilisées à des fins de communication.
+            </label>
+
+             <!-- Désactivation de captcha et ajout de redirection -->
+    <input type="hidden" name="_next" value="https://slybarrow.github.io/inscription-ateliers-impro/merci.html">
+    <input type="hidden" name="_captcha" value="false">
+
+    <button type="submit">Envoyer l'inscription</button>
+</form>
+
+        <div class="mentions">
+    <p><strong>Pour plus d’informations :</strong> Contactez-nous à <a href="mailto:EDUCATION.POPULAIRE@secourspopparis.org">EDUCATION.POPULAIRE@secourspopparis.org</a>.</p>
+</div>
+
+</body>
+</html>
