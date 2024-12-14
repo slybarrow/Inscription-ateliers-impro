@@ -118,7 +118,7 @@
             }
 
             if (phone && !phoneRegex.test(phone)) {
-                alert("Veuillez entrer un numéro de téléphone valide (ex. 06 12 34 56 78).");
+                alert("Veuillez entrer un numéro de téléphone valide (ex. 06 12 34 56 78). ");
                 event.preventDefault();
                 return false;
             }
@@ -156,7 +156,7 @@
             return 0;
         }
 
-        // Génération des dates de mardi
+        // Génération des dates de mardi excluant les vacances scolaires
         function generateTuesdays() {
             const calendar = document.getElementById("available-dates");
             const today = new Date();
@@ -164,8 +164,20 @@
             const endDate = new Date(Date.UTC(2025, 11, 31));
             let currentDate = startDate;
 
+            const vacationDates = [
+                { start: new Date("2025-02-22"), end: new Date("2025-03-10") }, // Vacances d'hiver
+                { start: new Date("2025-04-19"), end: new Date("2025-05-05") }, // Vacances de printemps
+                { start: new Date("2025-07-05"), end: new Date("2025-09-01") }, // Grandes vacances
+                { start: new Date("2025-10-18"), end: new Date("2025-11-03") }, // Vacances de la Toussaint
+                { start: new Date("2025-12-20"), end: new Date("2026-01-05") }, // Vacances de Noël
+            ];
+
             while (currentDate <= endDate) {
-                if (currentDate >= today) {
+                const isVacation = vacationDates.some(vacation =>
+                    currentDate >= vacation.start && currentDate <= vacation.end
+                );
+
+                if (currentDate >= today && !isVacation) {
                     const option = document.createElement("option");
                     option.value = currentDate.toISOString().split("T")[0];
                     option.textContent = currentDate.toLocaleDateString("fr-FR", {
@@ -246,7 +258,7 @@
                             document.write(`<option value="${index + 1}">${month}</option>`);
                         });
                     </script>
-                </select>
+                 </select>
                 <select id="year" name="Année" required onchange="calculateAge()">
                     <option value="">Année</option>
                     <script>
