@@ -168,7 +168,7 @@
                 data.forEach(entry => {
                     if (entry["Disponibilités"]) {
                         entry["Disponibilités"].split(",").forEach(date => {
-                            dateCounts[date] = (dateCounts[date] || 0) + 1;
+                            dateCounts[date.trim()] = (dateCounts[date.trim()] || 0) + 1;
                         });
                     }
                 });
@@ -277,7 +277,7 @@
             </select>
 
             <label for="email">Adresse e-mail <span>*</span></label>
-            <input type="email" id="email" name="Email" required>
+            <input type="email" id="email" name="E-mail" required>
 
             <label for="phone">Numéro de téléphone :</label>
             <input type="tel" id="phone" name="Téléphone" placeholder="Exemple : 06 12 34 56 78">
@@ -290,13 +290,13 @@
             </select>
 
             <label for="available-dates">Sélectionnez vos mardis<br>(16 personnes par cours) :</label>
-            <select id="available-dates" name="Dates disponibles[]" multiple>
+            <select id="available-dates" name="Disponibilités" multiple>
                 <!-- Les dates seront générées par JavaScript -->
             </select>
             <p id="date-count" style="font-size: 14px; color: #555;">0 dates sélectionnées.</p>
 
             <label>
-                <input type="checkbox" id="image-rights" name="Droit à l'image" value="Oui">
+                <input type="checkbox" id="image-rights" name="Droit à l'image" value="oui">
                 J'accepte que des images où je figure soient utilisées à des fins de communication.
             </label>
 
