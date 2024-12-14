@@ -310,11 +310,24 @@
             
 
             <button type="submit">Envoyer l'inscription</button>
-        <script>
+      <script>
     document.querySelector("form").addEventListener("submit", function (event) {
-        setTimeout(() => {
-            window.location.href = "https://slybarrow.github.io/inscription-ateliers-impro/merci.html";
-        }, 1000); // Redirection après 1 seconde
+        event.preventDefault(); // Empêche la soumission par défaut
+        const formData = new FormData(event.target);
+        fetch("https://sheetdb.io/api/v1/garbqmebupvlo", {
+            method: "POST",
+            body: formData,
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.href = "https://slybarrow.github.io/inscription-ateliers-impro/merci.html";
+            } else {
+                alert("Une erreur est survenue. Veuillez réessayer.");
+            }
+        })
+        .catch(() => {
+            alert("Impossible de soumettre le formulaire pour le moment.");
+        });
     });
 </script>
 </form>
