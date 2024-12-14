@@ -139,7 +139,7 @@
             })
             .then(response => response.text())
             .then(data => {
-                document.getElementById("responseMessage").innerText = data;
+                document.getElementById("responseMessage").innerText = "Merci, votre réponse a bien été envoyée !";
                 document.getElementById("confirmationForm").style.display = "none";
             })
             .catch(error => {
